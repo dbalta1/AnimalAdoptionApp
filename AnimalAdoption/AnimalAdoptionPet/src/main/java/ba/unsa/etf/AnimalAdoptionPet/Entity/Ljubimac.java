@@ -3,13 +3,21 @@ package ba.unsa.etf.AnimalAdoptionPet.Entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 public class Ljubimac {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int Id;
+
+
+    @Version
+    private Long version=0L;
 
     @ManyToOne
     @JoinColumn(name = "sklonisteId", referencedColumnName = "Id", nullable = false)
