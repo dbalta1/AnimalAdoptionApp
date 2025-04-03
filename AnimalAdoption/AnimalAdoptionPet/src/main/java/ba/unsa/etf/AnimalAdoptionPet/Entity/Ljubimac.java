@@ -13,11 +13,7 @@ public class Ljubimac {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Id;
-
-
-    @Version
-    private Long version=0L;
+    private Integer Id;
 
     @ManyToOne
     @JoinColumn(name = "sklonisteId", referencedColumnName = "Id", nullable = false)
@@ -37,14 +33,17 @@ public class Ljubimac {
 
     @NotNull(message = "Ovaj podatak je obavezan.")
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Spol spol;
 
     @NotNull(message = "Ovaj podatak je obavezan.")
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Velicina velicina;
 
     @NotNull(message = "Ovaj podatak je obavezan.")
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Energicnost energicnost;
 
     @NotNull(message = "Ovaj podatak je obavezan.")

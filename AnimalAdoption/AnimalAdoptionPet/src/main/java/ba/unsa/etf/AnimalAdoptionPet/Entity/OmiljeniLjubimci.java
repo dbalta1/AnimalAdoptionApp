@@ -16,6 +16,6 @@ public class OmiljeniLjubimci {
     private Ljubimac ljubimac;
 
     @Column(nullable = false)
-    private UUID korisnikID;  // UUID korisnika iz druge baze
+    private UUID korisnikID;
 
 }
