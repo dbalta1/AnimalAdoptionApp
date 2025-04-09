@@ -63,11 +63,11 @@ public class Korisnik {
     @Enumerated(EnumType.STRING)
     private Spol spol;
 
-    @NotNull(message = "Ovaj podatak je obavezan.")
     @Column(nullable = false)
     private int godine;
 
     @NotNull(message = "Ovaj podatak je obavezan.")
     @Column(nullable = false)
     private String adresa;
+
 }

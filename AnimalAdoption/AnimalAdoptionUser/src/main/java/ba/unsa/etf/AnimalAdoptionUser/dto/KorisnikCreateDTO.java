@@ -45,5 +45,7 @@ public class KorisnikCreateDTO {
     @NotNull(message = "Uloga je obavezna.")
     private String uloga;
 
+    public void setId(int i) {
+    }
 }
 

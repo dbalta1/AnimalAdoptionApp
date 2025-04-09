@@ -15,6 +15,16 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.server.ResponseStatusException;
+
 @Service
 public class KorisnikService {
 
@@ -27,6 +37,7 @@ public class KorisnikService {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
+
     public Optional<KorisnikDTO> getUserById(int id) {
         return korisnikRepository.findById(id).map(this::convertToDTO);
     }
@@ -35,7 +46,13 @@ public class KorisnikService {
         return korisnikRepository.findByKorisnikId(korisnikId).map(this::convertToDTO);
     }
 
-    public KorisnikDTO createUser(KorisnikCreateDTO korisnikCreateDTO) {
+    public ResponseEntity<Object> createUser(Korisnik korisnikCreateDTO) {
+        // Validacija
+        // Možeš dodati validaciju pomoću BindingResult ako želiš dodatne provere.
+        if (korisnikCreateDTO.getIme() == null || korisnikCreateDTO.getPrezime() == null) {
+            return ResponseEntity.badRequest().body("Ime i Prezime su obavezna polja.");
+        }
+
         Korisnik korisnik = new Korisnik();
         korisnik.setIme(korisnikCreateDTO.getIme());
         korisnik.setPrezime(korisnikCreateDTO.getPrezime());
@@ -43,21 +60,21 @@ public class KorisnikService {
         korisnik.setUsername(korisnikCreateDTO.getUsername());
         korisnik.setPassword(korisnikCreateDTO.getPassword());
         korisnik.setTelefon(korisnikCreateDTO.getTelefon());
-        korisnik.setSpol(Spol.valueOf(korisnikCreateDTO.getSpol()));
+        korisnik.setSpol(korisnikCreateDTO.getSpol());
         korisnik.setGodine(korisnikCreateDTO.getGodine());
         korisnik.setAdresa(korisnikCreateDTO.getAdresa());
-        korisnik.setUloga(Uloga.valueOf(korisnikCreateDTO.getUloga()));
+        korisnik.setUloga(korisnikCreateDTO.getUloga());
 
         korisnik.setKorisnikId(UUID.randomUUID());
 
         Korisnik savedUser = korisnikRepository.save(korisnik);
 
-        return convertToDTO(savedUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(convertToDTO(savedUser));
     }
 
-    public KorisnikDTO updateUser(int id, KorisnikUpdateDTO korisnikUpdateDTO) {
+    public KorisnikDTO updateUser(int id, Korisnik korisnikUpdateDTO) {
         Korisnik korisnik = korisnikRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Korisnik nije pronađen"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Korisnik nije pronađen"));
 
         if (korisnikUpdateDTO.getIme() != null) korisnik.setIme(korisnikUpdateDTO.getIme());
         if (korisnikUpdateDTO.getPrezime() != null) korisnik.setPrezime(korisnikUpdateDTO.getPrezime());
@@ -65,18 +82,24 @@ public class KorisnikService {
         if (korisnikUpdateDTO.getUsername() != null) korisnik.setUsername(korisnikUpdateDTO.getUsername());
         if (korisnikUpdateDTO.getPassword() != null) korisnik.setPassword(korisnikUpdateDTO.getPassword());
         if (korisnikUpdateDTO.getTelefon() != null) korisnik.setTelefon(korisnikUpdateDTO.getTelefon());
-        if (korisnikUpdateDTO.getSpol() != null) korisnik.setSpol(Spol.valueOf(korisnikUpdateDTO.getSpol()));
-        if (korisnikUpdateDTO.getGodine() != null) korisnik.setGodine(korisnikUpdateDTO.getGodine());
+        if (korisnikUpdateDTO.getSpol() != null) korisnik.setSpol(korisnikUpdateDTO.getSpol());
+        korisnik.setGodine(korisnikUpdateDTO.getGodine());
         if (korisnikUpdateDTO.getAdresa() != null) korisnik.setAdresa(korisnikUpdateDTO.getAdresa());
-        if (korisnikUpdateDTO.getUloga() != null) korisnik.setUloga(Uloga.valueOf(korisnikUpdateDTO.getUloga()));
+        if (korisnikUpdateDTO.getUloga() != null) korisnik.setUloga(korisnikUpdateDTO.getUloga());
 
         korisnikRepository.save(korisnik);
 
         return convertToDTO(korisnik);
     }
 
-    public void deleteUser(int id) {
+    public ResponseEntity<String> deleteUser(int id) {
+        Optional<Korisnik> korisnik = korisnikRepository.findById(id);
+        if (korisnik.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Korisnik sa ID " + id + " nije pronađen.");
+        }
+
         korisnikRepository.deleteById(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Korisnik sa ID " + id + " je uspešno obrisan.");
     }
 
     private KorisnikDTO convertToDTO(Korisnik korisnik) {
