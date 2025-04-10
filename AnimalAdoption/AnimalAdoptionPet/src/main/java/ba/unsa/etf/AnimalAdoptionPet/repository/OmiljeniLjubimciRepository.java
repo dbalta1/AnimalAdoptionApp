@@ -1,4 +1,4 @@
-package ba.unsa.etf.AnimalAdoptionPet.Repository;
+package ba.unsa.etf.AnimalAdoptionPet.repository;
 
 import ba.unsa.etf.AnimalAdoptionPet.Entity.OmiljeniLjubimci;
 import org.springframework.data.jpa.repository.JpaRepository;
