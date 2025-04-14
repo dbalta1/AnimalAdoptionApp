@@ -3,9 +3,14 @@ package ba.unsa.etf.AnimalAdoptionDonation.Entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
 
+
+@Getter
+@Setter
 @Entity
 public class VolonterAkcija {
 
@@ -24,5 +29,5 @@ public class VolonterAkcija {
     @NotNull(message = "Ovaj podatak je obavezan.")
     @Column(nullable = false)
     @FutureOrPresent(message = "Datum mora biti danas ili u buducnosti.")
-    private Date datumAkcije;
+    private LocalDate datumAkcije;
 }
