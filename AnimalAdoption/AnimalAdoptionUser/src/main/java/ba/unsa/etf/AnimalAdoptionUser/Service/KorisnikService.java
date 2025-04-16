@@ -1,13 +1,16 @@
-package ba.unsa.etf.AnimalAdoptionUser.service;
+package ba.unsa.etf.AnimalAdoptionUser.Service;
 
-import ba.unsa.etf.AnimalAdoptionUser.Entity.Spol;
-import ba.unsa.etf.AnimalAdoptionUser.Entity.Uloga;
-import ba.unsa.etf.AnimalAdoptionUser.dto.KorisnikCreateDTO;
 import ba.unsa.etf.AnimalAdoptionUser.dto.KorisnikDTO;
 import ba.unsa.etf.AnimalAdoptionUser.Entity.Korisnik;
-import ba.unsa.etf.AnimalAdoptionUser.dto.KorisnikUpdateDTO;
-import ba.unsa.etf.AnimalAdoptionUser.repository.KorisnikRepository;
+import ba.unsa.etf.AnimalAdoptionUser.Repository.KorisnikRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,15 +18,9 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class KorisnikService {
@@ -47,8 +44,6 @@ public class KorisnikService {
     }
 
     public ResponseEntity<Object> createUser(Korisnik korisnikCreateDTO) {
-        // Validacija
-        // Možeš dodati validaciju pomoću BindingResult ako želiš dodatne provere.
         if (korisnikCreateDTO.getIme() == null || korisnikCreateDTO.getPrezime() == null) {
             return ResponseEntity.badRequest().body("Ime i Prezime su obavezna polja.");
         }
@@ -117,4 +112,38 @@ public class KorisnikService {
         dto.setUloga(korisnik.getUloga());
         return dto;
     }
+
+
+        public Korisnik patchKorisnik(int id, JsonPatch patch) {
+            try {
+                Korisnik korisnik = korisnikRepository.findById(id)
+                        .orElseThrow(() -> new RuntimeException("Korisnik nije pronađen"));
+
+                ObjectMapper mapper = new ObjectMapper();
+                JsonNode korisnikNode = mapper.valueToTree(korisnik);
+                JsonNode patched = patch.apply(korisnikNode);
+
+                Korisnik korisnikPatched = mapper.treeToValue(patched, Korisnik.class);
+                korisnikPatched.setId(korisnik.getId());
+
+                return korisnikRepository.save(korisnikPatched);
+            } catch (Exception e) {
+                throw new RuntimeException("Neuspješno patchovanje korisnika", e);
+            }
+        }
+    public List<Korisnik> saveAll(List<Korisnik> korisnici) {
+        korisnici.forEach(korisnik -> {
+            if (korisnik.getKorisnikId() == null) {
+                korisnik.setKorisnikId(UUID.randomUUID());
+            }
+        });
+        return korisnikRepository.saveAll(korisnici);
+    }
+    public Page<Korisnik> getAllKorisnici(Pageable pageable) {
+        return korisnikRepository.findAll(pageable);
+    }
+
+
+
+
 }

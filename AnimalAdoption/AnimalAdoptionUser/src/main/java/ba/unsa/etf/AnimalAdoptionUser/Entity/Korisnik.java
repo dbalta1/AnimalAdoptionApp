@@ -23,7 +23,7 @@ public class Korisnik {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int Id;
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "korisnikID", updatable = false, nullable = false)
+    @Column(name = "korisnikID", updatable = false)
     private UUID korisnikId;
 
     @NotNull(message = "Ovaj podatak je obavezan.")

@@ -1,4 +1,4 @@
-package ba.unsa.etf.AnimalAdoptionUser.repository;
+package ba.unsa.etf.AnimalAdoptionUser.Repository;
 
 import ba.unsa.etf.AnimalAdoptionUser.Entity.Korisnik;
 import org.springframework.data.jpa.repository.JpaRepository;
