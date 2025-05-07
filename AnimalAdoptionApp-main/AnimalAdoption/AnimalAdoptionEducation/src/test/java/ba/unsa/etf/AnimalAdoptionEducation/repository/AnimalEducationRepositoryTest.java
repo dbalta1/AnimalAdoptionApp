@@ -6,11 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ba.unsa.etf.AnimalAdoptionEducation.repository.*;
+import jakarta.persistence.EntityManager;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-public class RepositoryTest {
+public class AnimalEducationRepositoryTest {
 
     @Autowired
     private ClanakRepository clanakRepository;
@@ -22,14 +24,19 @@ public class RepositoryTest {
     private ForumKomentarRepository forumKomentarRepository;
 
     @Autowired
-    private org.hibernate.engine.spi.SessionFactoryImplementor sessionFactory;
+    private EntityManager entityManager;
 
     @Test
     public void testNPlusOneProblem() {
+        SessionFactoryImplementor sessionFactory = entityManager
+                .getEntityManagerFactory()
+                .unwrap(SessionFactoryImplementor.class);
+
         Statistics stats = sessionFactory.getStatistics();
         stats.setStatisticsEnabled(true);
 
         clanakRepository.findAll();
         assertThat(stats.getPrepareStatementCount()).isLessThan(2);
     }
+
 }

@@ -1,27 +1,22 @@
-package ba.unsa.etf.AnimalAdoptionEducation.dto;
+package ba.unsa.etf.AnimalAdoptionEducation.Entity;
+
+import jakarta.persistence.*;
 
 import java.util.Date;
 import java.util.UUID;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import jakarta.validation.constraints.FutureOrPresent;
 
+@Entity
+public class ForumPost {
 
-public class ForumPostDTO {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "ID korisnika je obavezan.")
+    @Column(nullable = false)
     private String korisnikID;
 
-    @NotNull(message = "Naslov teme je obavezan.")
-    @Size(min = 3, max = 255, message = "Naslov mora imati između 3 i 255 karaktera.")
     private String naslovTeme;
-
-    @NotNull(message = "Sadržaj posta je obavezan.")
     private String sadrzajPosta;
-
-    @NotNull(message = "Datum objave je obavezan.")
-    @FutureOrPresent(message = "Datum mora biti danas ili u budućnosti.")
     private Date datumObjave;
 
     public Long getId() {
@@ -29,7 +24,7 @@ public class ForumPostDTO {
     }
 
     public void setId(Long id) {
-        this.id = id;
+        id = id;
     }
 
     public String getKorisnikID() {

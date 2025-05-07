@@ -1,25 +1,26 @@
-package ba.unsa.etf.AnimalAdoptionEducation.dto;
+package ba.unsa.etf.AnimalAdoptionEducation.Entity;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 import java.util.Date;
-import java.util.UUID;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import jakarta.validation.constraints.FutureOrPresent;
 
-
-
-public class ClanakDTO {
+@Entity
+public class Clanak {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "Naslov je obavezan.")
-    @Size(min = 3, max = 255, message = "Naslov mora imati između 3 i 255 karaktera.")
+    @NotNull(message = "Ovaj podatak je obavezan.")
+    @Column(nullable = false)
     private String naslov;
 
-    @NotNull(message = "Sadržaj je obavezan.")
+    @NotNull(message = "Ovaj podatak je obavezan.")
+    @Column(nullable = false)
     private String sadrzaj;
 
-    @NotNull(message = "Datum kreiranja je obavezan.")
-    @FutureOrPresent(message = "Datum mora biti danas ili u budućnosti.")
+    @NotNull(message = "Ovaj podatak je obavezan.")
+    @FutureOrPresent(message = "Datum mora biti danas ili u buducnosti.")
     private Date datumKreiranja;
 
     public Long getId() {
@@ -27,7 +28,7 @@ public class ClanakDTO {
     }
 
     public void setId(Long id) {
-        this.id = id;
+        id = id;
     }
 
     public String getNaslov() {

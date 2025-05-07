@@ -1,26 +1,31 @@
-package ba.unsa.etf.AnimalAdoptionEducation.dto;
+package ba.unsa.etf.AnimalAdoptionEducation.Entity;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 import java.util.Date;
-import java.util.UUID;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import jakarta.validation.constraints.FutureOrPresent;
 
-public class ForumKomentarDTO {
+@Entity
+public class ForumKomentar {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "ID posta je obavezan.")
-    private Long forumPostId;
+    @ManyToOne
+    @JoinColumn(name = "forum_post_id", referencedColumnName = "id", nullable = false)
+    private ForumPost forumPost;
 
-    @NotNull(message = "ID korisnika je obavezan.")
+    @Column(nullable = false)
     private String korisnikID;
 
-    @NotNull(message = "Sadržaj komentara je obavezan.")
-    @Size(min = 1, max = 500, message = "Komentar može imati do 500 karaktera.")
+    @NotNull(message = "Ovaj podatak je obavezan.")
+    @Column(nullable = false)
     private String sadrzajKomentara;
 
-    @NotNull(message = "Datum komentiranja je obavezan.")
-    @FutureOrPresent(message = "Datum mora biti danas ili u budućnosti.")
+    @NotNull(message = "Ovaj podatak je obavezan.")
+    @Column(nullable = false)
+    @FutureOrPresent(message = "Datum mora biti danas ili u buducnosti.")
     private Date datumKomentiranja;
 
     public Long getId() {
@@ -31,12 +36,12 @@ public class ForumKomentarDTO {
         this.id = id;
     }
 
-    public Long getForumPostId() {
-        return forumPostId;
+    public ForumPost getForumPost() {
+        return forumPost;
     }
 
-    public void setForumPostId(Long forumPostId) {
-        this.forumPostId = forumPostId;
+    public void setForumPost(ForumPost forumPost) {
+        this.forumPost = forumPost;
     }
 
     public String getKorisnikID() {
@@ -63,5 +68,3 @@ public class ForumKomentarDTO {
         this.datumKomentiranja = datumKomentiranja;
     }
 }
-
-

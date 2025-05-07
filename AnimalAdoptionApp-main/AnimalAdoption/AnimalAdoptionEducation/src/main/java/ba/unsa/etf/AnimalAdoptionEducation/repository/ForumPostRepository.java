@@ -1,6 +1,10 @@
 package ba.unsa.etf.AnimalAdoptionEducation.repository;
 
-import ba.unsa.etf.AnimalAdoptionEducation.entity.*;
+import ba.unsa.etf.AnimalAdoptionEducation.Entity.ForumPost;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ForumPostRepository extends JpaRepository<ForumPost, Integer> {}
+import java.util.List;
+
+public interface ForumPostRepository extends JpaRepository<ForumPost, Long> {
+    List<ForumPost> findByNaslovTemeContainingIgnoreCase(String naslovTeme);
+}
