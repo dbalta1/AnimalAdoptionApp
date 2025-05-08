@@ -2,9 +2,13 @@ package ba.unsa.etf.AnimalAdoptionDonation.Service;
 
 import ba.unsa.etf.AnimalAdoptionDonation.DTO.DonacijaDTOBO;
 import ba.unsa.etf.AnimalAdoptionDonation.Entity.Donacija;
+import ba.unsa.etf.AnimalAdoptionDonation.Entity.Korisnik;
 import ba.unsa.etf.AnimalAdoptionDonation.Repository.DonacijaRepository;
+import ba.unsa.etf.AnimalAdoptionDonation.Repository.KorisnikRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -75,5 +79,43 @@ public class DonacijaService {
         dto.setDatumDonacije(donacija.getDatumDonacije());
         dto.setKorisnikId(donacija.getKorisnik().getId());
         return dto;
+    }
+
+    // za batch
+
+    @Autowired
+    private KorisnikRepository korisnikRepository;
+
+    public List<DonacijaDTOBO> createBatchDonacije(List<DonacijaDTOBO> donacijeDTO) {
+        // Validacija ulaznih podataka
+        if (donacijeDTO == null || donacijeDTO.isEmpty()) {
+            throw new IllegalArgumentException("Lista donacija ne moze biti prazna");
+        }
+
+        return donacijeDTO.stream()
+                .map(this::createSingleDonacija)
+                .collect(Collectors.toList());
+    }
+
+    private DonacijaDTOBO createSingleDonacija(DonacijaDTOBO donacijaDTO) {
+        // Validacija pojedinačne donacije
+        if (donacijaDTO.getKorisnikId() == 0) {
+            throw new IllegalArgumentException("Korisnik ID je obavezan");
+        }
+
+        Korisnik korisnik = korisnikRepository.findById(donacijaDTO.getKorisnikId())
+                .orElseThrow(() -> new IllegalArgumentException("Korisnik sa ID " + donacijaDTO.getKorisnikId() + " ne postoji"));
+
+        Donacija donacija = new Donacija();
+        donacija.setVrstaDonacije(donacijaDTO.getVrstaDonacije());
+        donacija.setIznos(donacijaDTO.getIznos());
+        donacija.setOpisDonacije(donacijaDTO.getOpisDonacije());
+        donacija.setDatumDonacije(donacijaDTO.getDatumDonacije() != null
+                ? donacijaDTO.getDatumDonacije()
+                : LocalDate.now());
+        donacija.setKorisnik(korisnik);
+
+        Donacija savedDonacija = donacijaRepository.save(donacija);
+        return mapToDTO(savedDonacija);
     }
 }

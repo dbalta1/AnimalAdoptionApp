@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.Arrays;
 import java.util.Optional;
 
+import static ba.unsa.etf.AnimalAdoptionDonation.Entity.Uloga.KORISNIK;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -46,30 +47,32 @@ class KorisnikControllerTest {
 	@Test
 	void testGetAllKorisnici() throws Exception {
 		// Kreiranje korisnika sa odgovarajućim podacima
-		KorisnikDTO korisnik1 = new KorisnikDTO();
+		KorisnikDTOBO korisnik1 = new KorisnikDTOBO();
 		korisnik1.setId(1);
 		korisnik1.setIme("John");
 		korisnik1.setPrezime("Doe");
 		korisnik1.setEmail("john@example.com");
+		korisnik1.setTelefon("062/789-211");
+		korisnik1.setGodine(25);
+		korisnik1.setUloga(KORISNIK);
+		korisnik1.setAdresa("Novo naselje bb");
+		korisnik1.setUsername("johndoe1");
 
-		KorisnikDTO korisnik2 = new KorisnikDTO();
-		korisnik2.setId(2);
-		korisnik2.setIme("Jane");
-		korisnik2.setPrezime("Smith");
-		korisnik2.setEmail("jane@example.com");
 
-		when(korisnikService.getAllKorisnici()).thenReturn(Arrays.asList(korisnik1, korisnik2));
+		when(korisnikService.getAllKorisnici()).thenReturn(Arrays.asList(korisnik1));
 
 		mockMvc.perform(get("/korisnici"))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$[0].id").value(1))
-				.andExpect(jsonPath("$[1].id").value(2))
-				.andExpect(jsonPath("$[0].ime").value("John"))
-				.andExpect(jsonPath("$[1].ime").value("Jane"))
-				.andExpect(jsonPath("$[0].prezime").value("Doe"))
-				.andExpect(jsonPath("$[1].prezime").value("Smith"))
-				.andExpect(jsonPath("$[0].email").value("john@example.com"))
-				.andExpect(jsonPath("$[1].email").value("jane@example.com"));
+				.andExpect(jsonPath(".id").value(1))
+				.andExpect(jsonPath(".ime").value("John"))
+				.andExpect(jsonPath(".prezime").value("Doe"))
+				.andExpect(jsonPath(".email").value("john@example.com"))
+				.andExpect(jsonPath(".adresa").value("Novo naselje bb"))
+				.andExpect(jsonPath(".username").value("johndoe1"))
+				.andExpect(jsonPath(".telefon").value("062/789-211"))
+				.andExpect(jsonPath(".godine").value(25))
+				.andExpect(jsonPath(".uloga").value("KORISNIK"));
+
 
 		verify(korisnikService, times(1)).getAllKorisnici();
 	}
@@ -77,20 +80,30 @@ class KorisnikControllerTest {
 	@Test
 	void testGetKorisnikById() throws Exception {
 		int korisnikId = 1;
-		KorisnikDTO korisnik = new KorisnikDTO();
-		korisnik.setId(korisnikId);
-		korisnik.setIme("John");
-		korisnik.setPrezime("Doe");
-		korisnik.setEmail("john@example.com");
+		KorisnikDTOBO korisnik1 = new KorisnikDTOBO();
+		korisnik1.setId(1);
+		korisnik1.setIme("John");
+		korisnik1.setPrezime("Doe");
+		korisnik1.setEmail("john@example.com");
+		korisnik1.setTelefon("062/789-211");
+		korisnik1.setGodine(25);
+		korisnik1.setUloga(KORISNIK);
+		korisnik1.setAdresa("Novo naselje bb");
+		korisnik1.setUsername("johndoe1");
 
-		when(korisnikService.getKorisnikById(korisnikId)).thenReturn(Optional.of(korisnik));
+		when(korisnikService.getKorisnikById(korisnikId)).thenReturn(Optional.of(korisnik1));
 
 		mockMvc.perform(get("/korisnici/{id}", korisnikId))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.id").value(korisnikId))
 				.andExpect(jsonPath("$.ime").value("John"))
 				.andExpect(jsonPath("$.prezime").value("Doe"))
-				.andExpect(jsonPath("$.email").value("john@example.com"));
+				.andExpect(jsonPath("$.email").value("john@example.com"))
+				.andExpect(jsonPath(".adresa").value("Novo naselje bb"))
+				.andExpect(jsonPath(".username").value("johndoe1"))
+				.andExpect(jsonPath(".telefon").value("062/789-211"))
+				.andExpect(jsonPath(".godine").value(25))
+				.andExpect(jsonPath(".uloga").value("KORISNIK"));
 
 		verify(korisnikService, times(1)).getKorisnikById(korisnikId);
 	}
@@ -110,7 +123,7 @@ class KorisnikControllerTest {
 	@Test
 	void testCreateKorisnik() throws Exception {
 		Korisnik korisnik = new Korisnik();
-		korisnik.setUloga(Uloga.KORISNIK);
+		korisnik.setUloga(KORISNIK);
 		korisnik.setIme("Ana");
 		korisnik.setPrezime("Anić");
 		korisnik.setUsername("ana123");
@@ -122,14 +135,21 @@ class KorisnikControllerTest {
 		korisnik.setAdresa("Sarajevo bb");
 
 		// DTO koji vraća servis
-		KorisnikDTO korisnikDTO = new KorisnikDTO();
-		korisnikDTO.setId(1);
-		korisnikDTO.setIme("Ana");
-		korisnikDTO.setPrezime("Anić");
-		korisnikDTO.setEmail("ana@example.com");
+		KorisnikDTOBO korisnikDTOBO = new KorisnikDTOBO();
+		korisnikDTOBO.setId(1);
+		korisnikDTOBO.setIme("Ana");
+		korisnikDTOBO.setPrezime("Anić");
+		korisnikDTOBO.setEmail("ana@example.com");
+		korisnikDTOBO.setUsername("ana123");
+		korisnikDTOBO.setPassword("tajnasifra");
+		korisnikDTOBO.setEmail("ana@example.com");
+		korisnikDTOBO.setTelefon("061/111-111");
+		korisnikDTOBO.setSpol(Spol.ZENSKI);
+		korisnikDTOBO.setGodine(25);
+		korisnikDTOBO.setAdresa("Sarajevo bb");
 
 		// Kada se pozove createKorisnik, vraćamo DTO
-		when(korisnikService.createKorisnik(any(Korisnik.class))).thenReturn(korisnikDTO);
+		when(korisnikService.createKorisnik(any(Korisnik.class))).thenReturn(korisnikDTOBO);
 
 		mockMvc.perform(post("/korisnici")
 						.contentType(MediaType.APPLICATION_JSON)
@@ -149,7 +169,12 @@ class KorisnikControllerTest {
 				.andExpect(jsonPath("$.message").value("Korisnik je uspjesno kreiran."))
 				.andExpect(jsonPath("$.korisnik.ime").value("Ana"))
 				.andExpect(jsonPath("$.korisnik.prezime").value("Anić"))
-				.andExpect(jsonPath("$.korisnik.email").value("ana@example.com"));
+				.andExpect(jsonPath("$.korisnik.email").value("ana@example.com"))
+				.andExpect(jsonPath("$.korisnik.username").value("ana123"))
+				.andExpect(jsonPath("$.korisnik.spol").value("ZENSKI"))
+				.andExpect(jsonPath("$.korisnik.telefon").value("061/111-111"))
+				.andExpect(jsonPath("$.korisnik.godine").value(25))
+				.andExpect(jsonPath("$.korisnik.adresa").value("Sarajevo bb"));
 	}
 
 	@Test

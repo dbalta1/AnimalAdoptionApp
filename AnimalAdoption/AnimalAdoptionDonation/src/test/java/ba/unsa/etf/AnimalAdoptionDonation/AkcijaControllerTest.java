@@ -87,7 +87,7 @@ public class AkcijaControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id", is(1)))
                 .andExpect(jsonPath("$[0].nazivAkcije", is("Adoptiraj ljubimca")))
-                .andExpect(jsonPath("$[0].datumAkcije", is(Arrays.asList(2025, 4, 23))))
+                .andExpect(jsonPath("$[0].datumAkcije", is(Arrays.asList(2025, 4, 28))))
                 .andExpect(jsonPath("$[0].opisDogadjaja", is("Akcija udomljavanja pasa i mačaka")))
                 .andExpect(jsonPath("$[0].volonteriIds[0]", is(101)))
                 .andExpect(jsonPath("$[0].volonteriIds[1]", is(102)))
@@ -95,7 +95,7 @@ public class AkcijaControllerTest {
 
                 .andExpect(jsonPath("$[1].id", is(2)))
                 .andExpect(jsonPath("$[1].nazivAkcije", is("Doniraj hranu")))
-                .andExpect(jsonPath("$[0].datumAkcije", is(Arrays.asList(2025, 4, 23))))
+                .andExpect(jsonPath("$[0].datumAkcije", is(Arrays.asList(2025, 4, 28))))
                 .andExpect(jsonPath("$[1].opisDogadjaja", is("Prikupljanje hrane za životinje u skloništu")))
                 .andExpect(jsonPath("$[1].volonteriIds[0]", is(103)));
 

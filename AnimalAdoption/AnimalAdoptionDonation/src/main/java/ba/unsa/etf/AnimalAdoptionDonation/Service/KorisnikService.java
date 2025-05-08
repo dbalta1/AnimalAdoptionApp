@@ -3,7 +3,14 @@ package ba.unsa.etf.AnimalAdoptionDonation.Service;
 import ba.unsa.etf.AnimalAdoptionDonation.DTO.KorisnikDTO;
 import ba.unsa.etf.AnimalAdoptionDonation.DTO.KorisnikDTOBO;
 import ba.unsa.etf.AnimalAdoptionDonation.Entity.Korisnik;
+import ba.unsa.etf.AnimalAdoptionDonation.Exception.ResourceNotFoundException;
 import ba.unsa.etf.AnimalAdoptionDonation.Repository.KorisnikRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
@@ -23,21 +30,24 @@ public class KorisnikService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public List<KorisnikDTO> getAllKorisnici() {
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    public List<KorisnikDTOBO> getAllKorisnici() {
         return korisnikRepository.findAll().stream()
-                .map(korisnik -> modelMapper.map(korisnik, KorisnikDTO.class))
+                .map(korisnik -> modelMapper.map(korisnik, KorisnikDTOBO.class))
                 .collect(Collectors.toList());
     }
 
-    public Optional<KorisnikDTO> getKorisnikById(int id) {
+    public Optional<KorisnikDTOBO> getKorisnikById(int id) {
         return korisnikRepository.findById(id)
-                .map(korisnik -> modelMapper.map(korisnik, KorisnikDTO.class));
+                .map(korisnik -> modelMapper.map(korisnik, KorisnikDTOBO.class));
     }
 
-    public KorisnikDTO createKorisnik(Korisnik korisnik) {
+    public KorisnikDTOBO createKorisnik(Korisnik korisnik) {
         korisnik.setKorisnikId(UUID.randomUUID()); // Generišemo UUID
         Korisnik savedKorisnik = korisnikRepository.save(korisnik); // Spasiti korisnika u bazu
-        return modelMapper.map(savedKorisnik, KorisnikDTO.class); // Vratiti DTO za korisnika
+        return modelMapper.map(savedKorisnik, KorisnikDTOBO.class); // Vratiti DTO za korisnika
     }
 
     public Optional<Korisnik> updateKorisnik(int id, KorisnikDTOBO korisnikDTO) {
@@ -51,7 +61,7 @@ public class KorisnikService {
             if (korisnikDTO.getIme() != null) korisnik.setIme(korisnikDTO.getIme());
             if (korisnikDTO.getPrezime() != null) korisnik.setPrezime(korisnikDTO.getPrezime());
             if (korisnikDTO.getUsername() != null) korisnik.setUsername(korisnikDTO.getUsername());
-            if (korisnikDTO.getPassword() != null) korisnik.setPassword(korisnikDTO.getPassword());
+            //if (korisnikDTO.getPassword() != null) korisnik.setPassword(korisnikDTO.getPassword());
             if (korisnikDTO.getEmail() != null) korisnik.setEmail(korisnikDTO.getEmail());
             if (korisnikDTO.getTelefon() != null) korisnik.setTelefon(korisnikDTO.getTelefon());
             if (korisnikDTO.getSpol() != null) korisnik.setSpol(korisnikDTO.getSpol());
@@ -71,4 +81,41 @@ public class KorisnikService {
         }
         return false;
     }
+
+
+// ODAVDE DODATO ZA PATCH
+
+
+    private KorisnikDTOBO convertToDto(Korisnik korisnik) {
+        KorisnikDTOBO dto = new KorisnikDTOBO();
+        dto.setId(korisnik.getId());
+        dto.setKorisnikId(korisnik.getKorisnikId());
+        dto.setIme(korisnik.getIme());
+        dto.setPrezime(korisnik.getPrezime());
+        dto.setEmail(korisnik.getEmail());
+        dto.setTelefon(korisnik.getTelefon());
+        dto.setAdresa(korisnik.getAdresa());
+        dto.setSpol(korisnik.getSpol());
+        dto.setGodine(korisnik.getGodine());
+        dto.setUloga(korisnik.getUloga());
+        return dto;
+    }
+
+    @Transactional
+    public KorisnikDTOBO applyPatchToKorisnik(int id, JsonPatch patch) throws JsonPatchException, JsonProcessingException {
+        Korisnik korisnik = korisnikRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Korisnik not found with id: " + id));
+
+        // Convert the Korisnik to JsonNode
+        JsonNode patched = patch.apply(objectMapper.convertValue(korisnik, JsonNode.class));
+
+        // Convert the JsonNode back to Korisnik
+        Korisnik patchedKorisnik = objectMapper.treeToValue(patched, Korisnik.class);
+
+        // Save the updated Korisnik
+        korisnikRepository.save(patchedKorisnik);
+
+        return modelMapper.map(patchedKorisnik, KorisnikDTOBO.class);
+    }
+
 }

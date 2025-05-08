@@ -3,8 +3,13 @@ import ba.unsa.etf.AnimalAdoptionDonation.DTO.*;
 import ba.unsa.etf.AnimalAdoptionDonation.Entity.*;
 import ba.unsa.etf.AnimalAdoptionDonation.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -63,6 +68,26 @@ public class AkcijaService {
         existingAkcija.setDatumAkcije(akcijaDTOBO.getDatumAkcije());
         existingAkcija.setOpisDogadjaja(akcijaDTOBO.getOpisDogadjaja());
         return existingAkcija;
+    }
+
+    public Page<AkcijaDTOBO> getAllAkcijePaginated(int page, int size, String sortBy, String sortDirection) {
+        Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        return akcijaRepository.findAll(pageable).map(this::convertToDTO);
+    }
+
+    public Page<AkcijaDTOBO> searchAkcije(String naziv, LocalDate datumOd, LocalDate datumDo,
+                                          int page, int size, String sortBy, String sortDirection) {
+        Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        if (naziv != null || datumOd != null || datumDo != null) {
+            return akcijaRepository.findByNazivAndDatumBetween(naziv, datumOd, datumDo, pageable)
+                    .map(this::convertToDTO);
+        }
+
+        return akcijaRepository.findAll(pageable).map(this::convertToDTO);
     }
 
 }

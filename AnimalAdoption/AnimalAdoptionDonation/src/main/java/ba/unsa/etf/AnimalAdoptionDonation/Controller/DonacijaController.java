@@ -6,7 +6,9 @@ import ba.unsa.etf.AnimalAdoptionDonation.Entity.Korisnik;
 import ba.unsa.etf.AnimalAdoptionDonation.Repository.DonacijaRepository;
 import ba.unsa.etf.AnimalAdoptionDonation.Repository.KorisnikRepository;
 import ba.unsa.etf.AnimalAdoptionDonation.Service.DonacijaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -109,6 +111,25 @@ public class DonacijaController {
             return ResponseEntity.ok(Map.of("message", "Donacija uspjesno obrisana."));
         } else {
             return ResponseEntity.status(404).body(Map.of("message", "Donacija sa ID " + id + " ne postoji."));
+        }
+    }
+
+    @PostMapping("/batch")
+    public ResponseEntity<Map<String, Object>> createBatchDonacije(
+            @Valid @RequestBody List<DonacijaDTOBO> donacijeDTO) {
+
+        try {
+            List<DonacijaDTOBO> kreiraneDonacije = donacijaService.createBatchDonacije(donacijeDTO);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
+                    "message", "Uspjesno kreirano " + kreiraneDonacije.size() + " donacija",
+                    "brojKreiranihDonacija", kreiraneDonacije.size(),
+                    "donacije", kreiraneDonacije
+            ));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "message", e.getMessage()
+            ));
         }
     }
 }
