@@ -5,19 +5,28 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.UUID;
 
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Korisnik {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int Id;
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "korisnikId", updatable = false, nullable = false)
-    private UUID korisnikId;
+
+    @Column(name = "korisnikId", updatable = false, nullable = false, unique = true)
+    private UUID korisnikId = UUID.randomUUID();
 
     @NotNull(message = "Ovaj podatak je obavezan.")
     @Column(nullable = false)
@@ -48,7 +57,7 @@ public class Korisnik {
 
     @NotNull(message = "Ovaj podatak je obavezan.")
     @Column(nullable = false, unique = true)
-    @Pattern(regexp = "\\d{3}/\\d{3}-\\d{3}", message = "Telefon mora biti u formatu xxx/xxx-xxx.")
+    @Pattern(regexp = "0?\\d{2}/\\d{3}-\\d{3}", message = "Telefon mora biti u formatu xxx/xxx-xxx.")
     private String telefon;
 
     @NotNull(message = "Ovaj podatak je obavezan.")
@@ -64,7 +73,7 @@ public class Korisnik {
     @Column(nullable = false)
     private String adresa;
 
-
     @OneToOne(mappedBy = "korisnik", cascade=CascadeType.ALL)
     private Volonter volonter;
+
 }

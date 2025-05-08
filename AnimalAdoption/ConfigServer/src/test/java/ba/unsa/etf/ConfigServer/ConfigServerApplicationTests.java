@@ -1,10 +1,10 @@
-package ba.unsa.etf.AnimalAdoptionEducation;
+package ba.unsa.etf.ConfigServer;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AnimalAdoptionEducationApplicationTests {
+class ConfigServerApplicationTests {
 
 	@Test
 	void contextLoads() {
