@@ -4,19 +4,26 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
+
 public class Korisnik {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int Id;
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "korisnikID", updatable = false, nullable = false)
+    @Column(name = "korisnikID", updatable = false)
     private UUID korisnikId;
 
     @NotNull(message = "Ovaj podatak je obavezan.")
@@ -56,11 +63,11 @@ public class Korisnik {
     @Enumerated(EnumType.STRING)
     private Spol spol;
 
-    @NotNull(message = "Ovaj podatak je obavezan.")
     @Column(nullable = false)
     private int godine;
 
     @NotNull(message = "Ovaj podatak je obavezan.")
     @Column(nullable = false)
     private String adresa;
+
 }
