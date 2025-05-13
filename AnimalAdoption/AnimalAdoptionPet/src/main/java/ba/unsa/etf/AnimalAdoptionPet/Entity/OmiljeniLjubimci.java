@@ -1,9 +1,12 @@
 package ba.unsa.etf.AnimalAdoptionPet.Entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.UUID;
-
+@Getter
+@Setter
 @Entity
 public class OmiljeniLjubimci {
 
@@ -16,6 +19,6 @@ public class OmiljeniLjubimci {
     private Ljubimac ljubimac;
 
     @Column(nullable = false)
-    private UUID korisnikID;  // UUID korisnika iz druge baze
+    private UUID korisnikID;
 
 }

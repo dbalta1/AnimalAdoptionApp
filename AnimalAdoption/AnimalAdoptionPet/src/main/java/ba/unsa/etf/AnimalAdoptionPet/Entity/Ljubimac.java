@@ -3,13 +3,17 @@ package ba.unsa.etf.AnimalAdoptionPet.Entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 public class Ljubimac {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Id;
+    private Integer Id;
 
     @ManyToOne
     @JoinColumn(name = "sklonisteId", referencedColumnName = "Id", nullable = false)
@@ -29,14 +33,17 @@ public class Ljubimac {
 
     @NotNull(message = "Ovaj podatak je obavezan.")
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Spol spol;
 
     @NotNull(message = "Ovaj podatak je obavezan.")
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Velicina velicina;
 
     @NotNull(message = "Ovaj podatak je obavezan.")
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Energicnost energicnost;
 
     @NotNull(message = "Ovaj podatak je obavezan.")
