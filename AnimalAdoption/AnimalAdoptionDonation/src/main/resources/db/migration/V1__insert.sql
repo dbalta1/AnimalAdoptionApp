@@ -1,2 +1,0 @@
-INSERT INTO korisnik (adresa, email, godine, ime, korisnik_id, password, prezime, spol, telefon, uloga, username)
-VALUES ('Zmaja od Bosne bb', 'nikonikic@gmail.com', 28, 'Niko', UUID_TO_BIN(UUID()), 'password', 'Nikic', 'MUSKI', '062/789-456', 'KORISNIK', 'nikonikic');

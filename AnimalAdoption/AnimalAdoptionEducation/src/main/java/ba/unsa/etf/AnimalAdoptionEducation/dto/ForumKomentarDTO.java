@@ -23,6 +23,8 @@ public class ForumKomentarDTO {
     @FutureOrPresent(message = "Datum mora biti danas ili u budućnosti.")
     private Date datumKomentiranja;
 
+    private String autor;
+
     public Long getId() {
         return id;
     }
@@ -61,6 +63,14 @@ public class ForumKomentarDTO {
 
     public void setDatumKomentiranja(Date datumKomentiranja) {
         this.datumKomentiranja = datumKomentiranja;
+    }
+
+    public String getAutor() {
+        return autor;
+    }
+
+    public void setAutor(String autor) {
+        this.autor = autor;
     }
 }
 

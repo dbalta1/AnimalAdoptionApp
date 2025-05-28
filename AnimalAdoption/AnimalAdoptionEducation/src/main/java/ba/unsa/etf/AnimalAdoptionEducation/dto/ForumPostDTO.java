@@ -24,6 +24,8 @@ public class ForumPostDTO {
     @FutureOrPresent(message = "Datum mora biti danas ili u budućnosti.")
     private Date datumObjave;
 
+    private String autor;
+
     public Long getId() {
         return id;
     }
@@ -63,4 +65,7 @@ public class ForumPostDTO {
     public void setDatumObjave(Date datumObjave) {
         this.datumObjave = datumObjave;
     }
+
+    public String getAutor() { return autor; }
+    public void setAutor(String autor) { this.autor = autor; }
 }
