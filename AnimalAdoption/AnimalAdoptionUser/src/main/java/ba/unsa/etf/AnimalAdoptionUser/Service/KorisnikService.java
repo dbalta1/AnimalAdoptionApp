@@ -1,13 +1,17 @@
 package ba.unsa.etf.AnimalAdoptionUser.Service;
 
+import ba.unsa.etf.AnimalAdoptionUser.config.RabbitMQConfig;
 import ba.unsa.etf.AnimalAdoptionUser.dto.KorisnikDTO;
 import ba.unsa.etf.AnimalAdoptionUser.Entity.Korisnik;
 import ba.unsa.etf.AnimalAdoptionUser.Repository.KorisnikRepository;
+import ba.unsa.etf.AnimalAdoptionUser.dto.UserCreatedEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import com.github.fge.jsonpatch.JsonPatchException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,11 +26,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.ResponseEntity;
 
+@RequiredArgsConstructor
 @Service
 public class KorisnikService {
 
     @Autowired
     private KorisnikRepository korisnikRepository;
+    private final RabbitTemplate rabbitTemplate;
 
     public List<KorisnikDTO> getAllUsers() {
         return korisnikRepository.findAll()
@@ -61,9 +67,15 @@ public class KorisnikService {
         korisnik.setUloga(korisnikCreateDTO.getUloga());
 
         korisnik.setKorisnikId(UUID.randomUUID());
-
+        System.out.println("📤 Slanje poruke na RabbitMQ: " + korisnik.getEmail());
         Korisnik savedUser = korisnikRepository.save(korisnik);
+        UserCreatedEvent event = new UserCreatedEvent(
+                (long) korisnik.getId(),  // jer je kod tebe ID `int`, a očekuje se `Long`
+                korisnik.getEmail(),
+                korisnik.getIme() + " " + korisnik.getPrezime()
+        );
 
+        rabbitTemplate.convertAndSend(RabbitMQConfig.USER_CREATED_QUEUE, event);
         return ResponseEntity.status(HttpStatus.CREATED).body(convertToDTO(savedUser));
     }
 

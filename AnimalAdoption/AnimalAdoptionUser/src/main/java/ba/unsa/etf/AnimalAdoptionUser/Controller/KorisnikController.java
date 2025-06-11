@@ -55,6 +55,7 @@ public class KorisnikController {
 
     @PostMapping
     public ResponseEntity<Object> createUser(@Valid @RequestBody Korisnik korisnikCreateDTO) {
+
         return korisnikService.createUser(korisnikCreateDTO);
     }
 

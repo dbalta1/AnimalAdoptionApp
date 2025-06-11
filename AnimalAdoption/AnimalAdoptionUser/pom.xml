@@ -100,6 +100,13 @@
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
 
+		<!--Potrebno za asinhronu komunikaciju -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
+			<version>3.4.4</version>
+		</dependency>
+
 		<!-- Actuator za health check (obavezno za Eureka) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
