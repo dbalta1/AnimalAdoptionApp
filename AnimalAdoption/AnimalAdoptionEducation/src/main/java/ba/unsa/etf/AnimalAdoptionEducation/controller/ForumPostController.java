@@ -4,6 +4,8 @@ import ba.unsa.etf.AnimalAdoptionEducation.dto.ForumPostDTO;
 import ba.unsa.etf.AnimalAdoptionEducation.Entity.ForumPost;
 import ba.unsa.etf.AnimalAdoptionEducation.mapper.EntityMapper;
 import ba.unsa.etf.AnimalAdoptionEducation.repository.ForumPostRepository;
+import ba.unsa.etf.AnimalAdoptionEducation.service.ForumPostService;
+import ba.unsa.etf.AnimalAdoptionEducation.service.KomentarService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +24,8 @@ public class ForumPostController {
 
     @Autowired
     private EntityMapper entityMapper;
+    @Autowired
+    private ForumPostService forumPostService;
 
     @GetMapping("/all")
     public List<ForumPostDTO> getAll() {
@@ -35,6 +39,12 @@ public class ForumPostController {
         ForumPost post = forumPostRepository.findById(id).orElseThrow();
         return entityMapper.toDto(post);
     }
+
+    @GetMapping("/sa-autorom/{id}")
+    public ForumPostDTO getForumPostSaAutorom(@PathVariable Long id) {
+        return forumPostService.getForumPostSaAutorom(id);
+    }
+
 
     @PostMapping("/create")
     public ForumPostDTO create(@Valid @RequestBody ForumPostDTO forumPostDTO) {

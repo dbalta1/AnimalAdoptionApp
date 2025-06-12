@@ -31,5 +31,6 @@ public class KorisnikDTO {
     private Spol spol;
     private int godine;
     private String adresa;
+
 }
 

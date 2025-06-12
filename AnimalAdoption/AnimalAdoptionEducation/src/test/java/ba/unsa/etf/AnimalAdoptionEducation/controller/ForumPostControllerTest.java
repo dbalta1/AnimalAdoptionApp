@@ -104,8 +104,8 @@ class ForumPostControllerTest {
     @Test
     void batchCreate_shouldReturn200_whenValid() throws Exception {
         String validBatch = "[\n" +
-                "  {\"korisnikID\":\"korisnik123\", \"naslovTeme\":\"Naslov 1\", \"sadrzajPosta\":\"Tekst 1\", \"datumObjave\":\"2025-04-20\"},\n" +
-                "  {\"korisnikID\":\"korisnik456\", \"naslovTeme\":\"Naslov 2\", \"sadrzajPosta\":\"Tekst 2\", \"datumObjave\":\"2025-04-21\"}\n" +
+                "  {\"korisnikID\":\"korisnik123\", \"naslovTeme\":\"Naslov 1\", \"sadrzajPosta\":\"Tekst 1\", \"datumObjave\":\"2028-04-20\"},\n" + //ovaj datum pravi problem
+                "  {\"korisnikID\":\"korisnik456\", \"naslovTeme\":\"Naslov 2\", \"sadrzajPosta\":\"Tekst 2\", \"datumObjave\":\"2028-04-21\"}\n" +
                 "]";
 
         when(forumPostRepository.saveAll(any())).thenReturn(Collections.emptyList());

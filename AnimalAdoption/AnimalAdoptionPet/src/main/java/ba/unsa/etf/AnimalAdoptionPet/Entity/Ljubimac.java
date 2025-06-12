@@ -69,4 +69,11 @@ public class Ljubimac {
     @NotNull(message = "Ovaj podatak je obavezan.")
     @Column(nullable = false)
     private String slika;
+
+    // Možda nedostaje ovaj setter!
+    public void setId(int id) {
+        this.Id = id;
+    }
 }
+
+
