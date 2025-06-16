@@ -36,3 +36,19 @@
     transform: rotate(360deg);
   }
 }
+
+
+/* Globalni stilovi */
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+.navbar {
+  padding: 15px 0;
+}
+
+.active {
+  font-weight: bold;
+}
+
+

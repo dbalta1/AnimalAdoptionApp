@@ -1,0 +1,72 @@
+/* Hero sekcija */
+.hero-section .carousel-item {
+  height: 60vh;
+  min-height: 400px;
+}
+
+.hero-section .carousel-item img {
+  object-fit: cover;
+  height: 100%;
+}
+
+.hero-section .carousel-caption {
+  bottom: 40%;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.hero-section h1 {
+  font-size: 3rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Animal cards */
+.animal-card {
+  transition: transform 0.3s ease;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.animal-card:hover {
+  transform: translateY(-10px);
+}
+
+.adopt-button {
+  background-color: #FF7F50;
+  border-color: #FF7F50;
+}
+
+.adopt-button:hover {
+  background-color: #e67347;
+  border-color: #e67347;
+}
+
+/* CTA sekcija */
+.cta-section {
+  background-color: #FF7F50;
+}
+
+.cta-button {
+  background-color: #FF7F50;
+  border-color: #FF7F50;
+  padding: 10px 30px;
+  font-weight: bold;
+}
+
+.cta-button:hover {
+  background-color: #e67347;
+  border-color: #e67347;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .hero-section h1 {
+    font-size: 2rem;
+  }
+  
+  .hero-section .carousel-caption {
+    bottom: 20%;
+  }
+}
