@@ -2,6 +2,8 @@ package ba.unsa.etf.AnimalAdoptionEducation.dto;
 
 import java.util.Date;
 import java.util.UUID;
+
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.FutureOrPresent;

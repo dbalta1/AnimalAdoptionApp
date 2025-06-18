@@ -1,5 +1,6 @@
 package ba.unsa.etf.AnimalAdoptionUser.Controller;
 
+//import ba.unsa.etf.AnimalAdoptionEducation.dto.ForumKomentarDTO;
 import ba.unsa.etf.AnimalAdoptionUser.Entity.Korisnik;
 import ba.unsa.etf.AnimalAdoptionUser.dto.KorisnikDTO;
 import ba.unsa.etf.AnimalAdoptionUser.Service.KorisnikService;
@@ -17,6 +18,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Value;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +34,9 @@ public class KorisnikController {
     @Autowired
     private KorisnikService korisnikService;
 
-    private KorisnikRepository korisnikRepository;
+    @Value("${server.port}")
+    private String port;
+    private static final Logger logger = LoggerFactory.getLogger(KorisnikController.class);
 
     @GetMapping
     public List<KorisnikDTO> getAllUsers() {
@@ -42,8 +48,10 @@ public class KorisnikController {
         return korisnikService.getUserById(id);
     }
 
+
     @GetMapping("/uuid/{korisnikId}")
     public Optional<KorisnikDTO> getUserByUuid(@PathVariable UUID korisnikId) {
+        logger.info("🌀 Pozvana instanca user-service na portu: {}", port);
         return korisnikService.getUserByUuid(korisnikId);
     }
 

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 public class Clanak {
@@ -22,6 +23,8 @@ public class Clanak {
     @NotNull(message = "Ovaj podatak je obavezan.")
     @FutureOrPresent(message = "Datum mora biti danas ili u buducnosti.")
     private Date datumKreiranja;
+
+
 
     public Long getId() {
         return id;

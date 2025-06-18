@@ -5,6 +5,7 @@ import ba.unsa.etf.AnimalAdoptionEducation.Entity.ForumKomentar;
 import ba.unsa.etf.AnimalAdoptionEducation.mapper.EntityMapper;
 import ba.unsa.etf.AnimalAdoptionEducation.repository.ForumKomentarRepository;
 import ba.unsa.etf.AnimalAdoptionEducation.repository.ForumPostRepository;
+import ba.unsa.etf.AnimalAdoptionEducation.service.KomentarService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,9 @@ public class ForumKomentarController {
     private ForumPostRepository forumPostRepository;
 
     @Autowired
+    private KomentarService komentarService;
+
+    @Autowired
     private EntityMapper entityMapper;
 
     @GetMapping("/all")
@@ -30,6 +34,19 @@ public class ForumKomentarController {
         return forumKomentarRepository.findAll().stream()
                 .map(entityMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+
+    // Getter koji vraća komentar i njegovo ime pretražujući po ID
+    @GetMapping("/sa-korisnikom/{id}")
+    public ForumKomentarDTO getKomentarSaKorisnikom(@PathVariable Long id) {
+        return komentarService.getKomentarSaAutorom(id);
+    }
+
+    //Getter koji vraća sve komentare jedne osobe prema id
+    @GetMapping("/korisnik/{id}")
+    public List<ForumKomentarDTO> getKomentariKorisnika(@PathVariable int id) {
+        return komentarService.getKomentariZaKorisnika(id);
     }
 
     @GetMapping("/get/{id}")

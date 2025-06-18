@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class ForumKomentar {
@@ -67,4 +68,5 @@ public class ForumKomentar {
     public void setDatumKomentiranja(Date datumKomentiranja) {
         this.datumKomentiranja = datumKomentiranja;
     }
+
 }
