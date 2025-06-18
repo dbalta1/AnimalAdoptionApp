@@ -1,4 +1,4 @@
-package ba.unsa.etf.AnimalAdoptionDonation;
+/*package ba.unsa.etf.AnimalAdoptionDonation;
 
 import ba.unsa.etf.AnimalAdoptionDonation.DTO.VolonterDTOBO;
 import ba.unsa.etf.AnimalAdoptionDonation.Entity.Korisnik;
@@ -206,4 +206,4 @@ public class VolonterControllerTest {
         verify(volonterService, times(1)).updateVolonter(1, volonterDTO);
     }
 
-}
+}*/

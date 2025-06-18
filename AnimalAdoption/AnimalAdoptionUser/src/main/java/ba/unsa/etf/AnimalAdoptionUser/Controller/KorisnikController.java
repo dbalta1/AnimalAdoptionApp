@@ -4,6 +4,9 @@ package ba.unsa.etf.AnimalAdoptionUser.Controller;
 import ba.unsa.etf.AnimalAdoptionUser.Entity.Korisnik;
 import ba.unsa.etf.AnimalAdoptionUser.dto.KorisnikDTO;
 import ba.unsa.etf.AnimalAdoptionUser.Service.KorisnikService;
+import ba.unsa.etf.AnimalAdoptionUser.dto.LoginRequest;
+import ba.unsa.etf.AnimalAdoptionUser.dto.LoginResponse;
+import ba.unsa.etf.AnimalAdoptionUser.dto.RegisterRequest;
 import com.github.fge.jsonpatch.JsonPatch;
 import ba.unsa.etf.AnimalAdoptionUser.Repository.KorisnikRepository;
 import jakarta.validation.Valid;
@@ -20,9 +23,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 
 @RestController
@@ -56,6 +57,7 @@ public class KorisnikController {
     @PostMapping
     public ResponseEntity<Object> createUser(@Valid @RequestBody Korisnik korisnikCreateDTO) {
         return korisnikService.createUser(korisnikCreateDTO);
+
     }
 
     @PutMapping("/{id}")
@@ -76,10 +78,12 @@ public class KorisnikController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
     @PostMapping("/batch")
     public ResponseEntity<List<Korisnik>> batchSave(@RequestBody List<Korisnik> korisnici) {
         return ResponseEntity.ok(korisnikService.saveAll(korisnici));
     }
+
     @GetMapping("/ge")
     public ResponseEntity<Page<Korisnik>> getKorisnici(
             @RequestParam(defaultValue = "0") int page,
@@ -90,12 +94,18 @@ public class KorisnikController {
         return ResponseEntity.ok(korisnikService.getAllKorisnici(pageable));
     }
 
+    @PostMapping("/auth/register")
+    public ResponseEntity<?> registerUser(@RequestBody RegisterRequest request) {
+        korisnikService.register(request);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Korisnik je uspješno registrovan");
+        return ResponseEntity.ok(response);
+    }
 
-
-
-
-
-
+    @PostMapping("/auth/login")
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
+        return korisnikService.login(request);
+    }
 
 }
 

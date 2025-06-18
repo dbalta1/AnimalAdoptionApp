@@ -1,8 +1,11 @@
 package ba.unsa.etf.AnimalAdoptionUser.Service;
 
+import ba.unsa.etf.AnimalAdoptionUser.Config.JwtUtil;
+import ba.unsa.etf.AnimalAdoptionUser.Entity.Uloga;
 import ba.unsa.etf.AnimalAdoptionUser.dto.KorisnikDTO;
 import ba.unsa.etf.AnimalAdoptionUser.Entity.Korisnik;
 import ba.unsa.etf.AnimalAdoptionUser.Repository.KorisnikRepository;
+import ba.unsa.etf.AnimalAdoptionUser.dto.LoginResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import ba.unsa.etf.AnimalAdoptionUser.dto.LoginRequest;
+import ba.unsa.etf.AnimalAdoptionUser.dto.RegisterRequest;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +27,9 @@ import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 @Service
 public class KorisnikService {
@@ -142,6 +151,55 @@ public class KorisnikService {
     public Page<Korisnik> getAllKorisnici(Pageable pageable) {
         return korisnikRepository.findAll(pageable);
     }
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    public ResponseEntity<String> register(RegisterRequest request) {
+        if (korisnikRepository.findByUsername(request.getUsername()).isPresent()) {
+            return ResponseEntity.badRequest().body("Username već postoji.");
+        }
+
+        Korisnik korisnik = new Korisnik();
+        korisnik.setIme(request.getIme());
+        korisnik.setPrezime(request.getPrezime());
+        korisnik.setUsername(request.getUsername());
+        korisnik.setPassword(passwordEncoder.encode(request.getPassword())); // hash lozinke
+        korisnik.setEmail(request.getEmail());
+        korisnik.setTelefon(request.getTelefon());
+        korisnik.setSpol(request.getSpol());
+        korisnik.setGodine(request.getGodine());
+        korisnik.setAdresa(request.getAdresa());
+        korisnik.setUloga(request.getUloga() != null ? request.getUloga() : Uloga.KORISNIK);
+        korisnik.setKorisnikId(UUID.randomUUID());
+
+        korisnikRepository.save(korisnik);
+        return ResponseEntity.ok("Uspješna registracija.");
+    }
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    public ResponseEntity<LoginResponse> login(LoginRequest request) {
+        Optional<Korisnik> korisnikOpt = korisnikRepository.findByEmail(request.getEmail());
+        if (korisnikOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(null);
+        }
+
+        Korisnik korisnik = korisnikOpt.get();
+        if (!passwordEncoder.matches(request.getPassword(), korisnik.getPassword())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(null);
+        }
+
+        String jwt = jwtUtil.generateToken(korisnik.getEmail(), korisnik.getKorisnikId());
+
+        LoginResponse response = new LoginResponse(jwt, korisnik.getUloga().toString());
+        return ResponseEntity.ok(response);
+    }
+
+
 
 
 

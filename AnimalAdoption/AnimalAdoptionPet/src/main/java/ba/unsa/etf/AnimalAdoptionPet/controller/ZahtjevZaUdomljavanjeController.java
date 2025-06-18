@@ -1,6 +1,7 @@
 package ba.unsa.etf.AnimalAdoptionPet.controller;
 
 import ba.unsa.etf.AnimalAdoptionPet.Entity.ZahtjevZaUdomljavanje;
+import ba.unsa.etf.AnimalAdoptionPet.dto.ZahtjevZaUdomljavanjeDTO;
 import ba.unsa.etf.AnimalAdoptionPet.service.ZahtjevZaUdomljavanjeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,11 +19,6 @@ public class ZahtjevZaUdomljavanjeController {
         this.service = service;
     }
 
-    @PostMapping
-    public ResponseEntity<ZahtjevZaUdomljavanje> create(@RequestBody ZahtjevZaUdomljavanje zahtjev) {
-        return ResponseEntity.ok(service.save(zahtjev));
-    }
-
     @GetMapping("/korisnik/{korisnikId}")
     public ResponseEntity<List<ZahtjevZaUdomljavanje>> getByKorisnik(@PathVariable UUID korisnikId) {
         return ResponseEntity.ok(service.getByKorisnikId(korisnikId));
@@ -38,4 +34,10 @@ public class ZahtjevZaUdomljavanjeController {
         service.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping
+    public ResponseEntity<ZahtjevZaUdomljavanje> create(@RequestBody ZahtjevZaUdomljavanjeDTO dto) {
+        return ResponseEntity.ok(service.create(dto));
+    }
+
 }

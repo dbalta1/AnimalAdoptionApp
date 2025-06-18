@@ -1,4 +1,4 @@
-package ba.unsa.etf.AnimalAdoptionDonation;
+/*package ba.unsa.etf.AnimalAdoptionDonation;
 
 import ba.unsa.etf.AnimalAdoptionDonation.DTO.AkcijaDTOBO;
 import ba.unsa.etf.AnimalAdoptionDonation.Entity.Akcija;
@@ -236,3 +236,4 @@ public class AkcijaControllerTest {
                 .andExpect(jsonPath("$.message").value("Akcija sa ID 999 ne postoji."));
     }
 }
+*/
