@@ -3,6 +3,8 @@ package ba.unsa.etf.AnimalAdoptionUser.Controller;
 import ba.unsa.etf.AnimalAdoptionUser.Entity.Korisnik;
 import ba.unsa.etf.AnimalAdoptionUser.dto.KorisnikDTO;
 import ba.unsa.etf.AnimalAdoptionUser.Service.KorisnikService;
+import ba.unsa.etf.AnimalAdoptionUser.dto.LoginRequest;
+import ba.unsa.etf.AnimalAdoptionUser.dto.RegisterRequest;
 import com.github.fge.jsonpatch.JsonPatch;
 import ba.unsa.etf.AnimalAdoptionUser.Repository.KorisnikRepository;
 import jakarta.validation.Valid;
@@ -48,6 +50,7 @@ public class KorisnikController {
     @PostMapping
     public ResponseEntity<Object> createUser(@Valid @RequestBody Korisnik korisnikCreateDTO) {
         return korisnikService.createUser(korisnikCreateDTO);
+
     }
 
     @PutMapping("/{id}")
@@ -81,6 +84,23 @@ public class KorisnikController {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
         return ResponseEntity.ok(korisnikService.getAllKorisnici(pageable));
     }
+
+    @PostMapping("/auth/register")
+    public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest request) {
+        try {
+            return korisnikService.register(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Greška: " + e.getMessage());
+        }
+    }
+
+
+    @PostMapping("/auth/login")
+    public ResponseEntity<String> login(@Valid @RequestBody LoginRequest request) {
+        return korisnikService.login(request);
+    }
+
 
 
 

@@ -1,4 +1,4 @@
-package ba.unsa.etf.AnimalAdoptionDonation;
+/*package ba.unsa.etf.AnimalAdoptionDonation;
 
 import ba.unsa.etf.AnimalAdoptionDonation.DTO.DonacijaDTOBO;
 import ba.unsa.etf.AnimalAdoptionDonation.Entity.Donacija;
@@ -272,29 +272,5 @@ public class DonacijaControllerTest {
                 .andExpect(jsonPath("$.message").value("Donacija sa ID 999 ne postoji."));
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
+*/

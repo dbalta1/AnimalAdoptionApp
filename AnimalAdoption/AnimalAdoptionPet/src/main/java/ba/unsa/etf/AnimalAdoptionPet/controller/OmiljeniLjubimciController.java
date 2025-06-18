@@ -1,6 +1,8 @@
 package ba.unsa.etf.AnimalAdoptionPet.controller;
 
 import ba.unsa.etf.AnimalAdoptionPet.Entity.OmiljeniLjubimci;
+import ba.unsa.etf.AnimalAdoptionPet.Entity.ZahtjevZaUdomljavanje;
+import ba.unsa.etf.AnimalAdoptionPet.dto.ZahtjevZaUdomljavanjeDTO;
 import ba.unsa.etf.AnimalAdoptionPet.service.OmiljeniLjubimciService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,4 +46,5 @@ public class OmiljeniLjubimciController {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
+
 }
