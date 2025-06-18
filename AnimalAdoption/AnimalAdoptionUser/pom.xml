@@ -14,6 +14,14 @@
 	<name>AnimalAdoptionUser</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
+
+	<repositories>
+		<repository>
+			<id>central</id>
+			<url>https://repo.maven.apache.org/maven2</url>
+		</repository>
+	</repositories>
+
 	<licenses>
 		<license/>
 	</licenses>
@@ -41,6 +49,34 @@
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>
+		<!-- Spring Security dependency -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		<!-- JJWT API -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>0.11.5</version>
+		</dependency>
+
+		<!-- JJWT Implementation -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>0.11.5</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- JJWT Jackson (for JSON processing) -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>0.11.5</version>
+			<scope>runtime</scope>
+		</dependency>
 		<!-- Feign client-->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -134,13 +170,17 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-openfeign-core</artifactId>
         </dependency>
-		<!--
-		<dependency>
-			<groupId>ba.unsa.etf</groupId>
-			<artifactId>AnimalAdoptionEducation</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency> -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-crypto</artifactId>
+        </dependency>
+        <!--
+        <dependency>
+            <groupId>ba.unsa.etf</groupId>
+            <artifactId>AnimalAdoptionEducation</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency> -->
 		<!--
         <dependency>
             <groupId>ba.unsa.etf</groupId>

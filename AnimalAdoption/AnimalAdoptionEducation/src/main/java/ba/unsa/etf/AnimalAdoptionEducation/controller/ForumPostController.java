@@ -34,6 +34,11 @@ public class ForumPostController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/all-sa-autorom")
+    public List<ForumPostDTO> getAllSaAutorom() {
+        return forumPostService.getAllPostoviSaAutorima();
+    }
+
     @GetMapping("/get/{id}")
     public ForumPostDTO getById(@PathVariable Long id) {
         ForumPost post = forumPostRepository.findById(id).orElseThrow();

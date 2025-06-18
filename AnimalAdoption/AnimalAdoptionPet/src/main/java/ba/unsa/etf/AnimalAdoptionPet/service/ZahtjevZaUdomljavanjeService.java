@@ -1,7 +1,7 @@
 package ba.unsa.etf.AnimalAdoptionPet.service;
 
 import ba.unsa.etf.AnimalAdoptionPet.Entity.ZahtjevZaUdomljavanje;
-import ba.unsa.etf.AnimalAdoptionPet.Repository.ZahtjevZaUdomljavanjeRepository;
+import ba.unsa.etf.AnimalAdoptionPet.repository.ZahtjevZaUdomljavanjeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -7,6 +7,7 @@ import ba.unsa.etf.AnimalAdoptionUser.Entity.Uloga;
 import ba.unsa.etf.AnimalAdoptionUser.Entity.Korisnik;
 import ba.unsa.etf.AnimalAdoptionUser.Repository.KorisnikRepository;
 import ba.unsa.etf.AnimalAdoptionUser.Service.KorisnikService;
+import ba.unsa.etf.AnimalAdoptionUser.security.JwtTokenProviderTest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -28,8 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = {AnimalAdoptionUserApplication.class, ModelMapperConfig.class})
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-
-class KorisnikControllerTest {
+public class KorisnikControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -37,12 +37,21 @@ class KorisnikControllerTest {
     private KorisnikService korisnikService;
     @Autowired
     private KorisnikRepository korisnikRepository;
+    @Autowired
+    private JwtTokenProviderTest jwtTokenProvider;
 
     int korisnikId;
+
+    // Generisanje JWT tokena za test korisnike
+    private String generateJwtToken(String email) {
+        return jwtTokenProvider.generateToken(email);
+    }
 
     @BeforeAll
     void setUp() {
         korisnikRepository.deleteAll();
+
+        // Kreiramo test korisnike
         Korisnik korisnik1 = new Korisnik();
         korisnik1.setIme("Ana");
         korisnik1.setPrezime("Anić");
@@ -55,7 +64,6 @@ class KorisnikControllerTest {
         korisnik1.setUloga(Uloga.KORISNIK);
         korisnik1.setGodine(28);
 
-
         Korisnik korisnik2 = new Korisnik();
         korisnik2.setIme("Marko");
         korisnik2.setPrezime("Marić");
@@ -67,31 +75,40 @@ class KorisnikControllerTest {
         korisnik2.setSpol(Spol.MUSKI);
         korisnik2.setUloga(Uloga.KORISNIK);
         korisnik2.setGodine(32);
+
         korisnikService.createUser(korisnik1);
         korisnikService.createUser(korisnik2);
     }
 
-
     @Test
-    void getAllUsers() throws Exception {
-        mockMvc.perform(get("/korisnici"))
+    void testGetAllUsers() throws Exception {
+        String token = generateJwtToken("ana@example.com");  // Generiši token za test korisnika
+
+        mockMvc.perform(get("/korisnici")
+                        .header("Authorization", "Bearer " + token))  // Dodaj JWT token u header
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(2)));
+                .andExpect(jsonPath("$", hasSize(2)));  // Proverava broj korisnika
     }
 
     @Test
-    void getUserById() throws Exception {
+    void testGetUserById() throws Exception {
         Korisnik korisnik = korisnikRepository.findAll().get(0);
-        mockMvc.perform(get("/korisnici/" + korisnik.getId()))
+        String token = generateJwtToken(korisnik.getEmail());  // Generiši token za korisnika
+
+        mockMvc.perform(get("/korisnici/" + korisnik.getId())
+                        .header("Authorization", "Bearer " + token))  // Dodaj JWT token u header
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.username", is(korisnik.getUsername())));
+                .andExpect(jsonPath("$.username", is(korisnik.getUsername())));  // Očekuj korisničko ime
     }
+
     @Test
-    void createUser() throws Exception {
+    void testCreateUser() throws Exception {
+        String token = generateJwtToken("ana@example.com");  // Generiši token za test korisnika
+
         String noviKorisnikJson = """
         {
             "ime": "Ivana",
@@ -108,15 +125,18 @@ class KorisnikControllerTest {
         """;
 
         mockMvc.perform(post("/korisnici")
+                        .header("Authorization", "Bearer " + token) // Dodaj JWT token u header
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(noviKorisnikJson))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.username", is("ivana123")));
+                .andExpect(jsonPath("$.username", is("ivana123")));  // Očekivani korisnički podaci
     }
+
     @Test
-    void updateUser() throws Exception {
+    void testUpdateUser() throws Exception {
         Korisnik korisnik = korisnikRepository.findAll().get(0);
+        String token = generateJwtToken(korisnik.getEmail()); // Generiši token za korisnika
 
         String updateJson = """
         {
@@ -134,10 +154,11 @@ class KorisnikControllerTest {
         """;
 
         mockMvc.perform(put("/korisnici/" + korisnik.getId())
+                        .header("Authorization", "Bearer " + token) // Dodaj JWT token u header
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updateJson))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.username", is("anaUpdated")));
+                .andExpect(jsonPath("$.username", is("anaUpdated")));  // Očekivana promena u korisniku
     }
 }

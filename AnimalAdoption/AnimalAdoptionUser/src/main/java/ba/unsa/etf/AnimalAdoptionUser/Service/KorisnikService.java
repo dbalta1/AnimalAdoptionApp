@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,6 +35,10 @@ public class KorisnikService {
     private KorisnikRepository korisnikRepository;
     private final RabbitTemplate rabbitTemplate;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+
     public List<KorisnikDTO> getAllUsers() {
         return korisnikRepository.findAll()
                 .stream()
@@ -49,6 +54,7 @@ public class KorisnikService {
         return korisnikRepository.findByKorisnikId(korisnikId).map(this::convertToDTO);
     }
 
+
     public ResponseEntity<Object> createUser(Korisnik korisnikCreateDTO) {
         if (korisnikCreateDTO.getIme() == null || korisnikCreateDTO.getPrezime() == null) {
             return ResponseEntity.badRequest().body("Ime i Prezime su obavezna polja.");
@@ -59,7 +65,7 @@ public class KorisnikService {
         korisnik.setPrezime(korisnikCreateDTO.getPrezime());
         korisnik.setEmail(korisnikCreateDTO.getEmail());
         korisnik.setUsername(korisnikCreateDTO.getUsername());
-        korisnik.setPassword(korisnikCreateDTO.getPassword());
+        korisnik.setPassword(passwordEncoder.encode(korisnikCreateDTO.getPassword()));  // Enkripcija lozinke
         korisnik.setTelefon(korisnikCreateDTO.getTelefon());
         korisnik.setSpol(korisnikCreateDTO.getSpol());
         korisnik.setGodine(korisnikCreateDTO.getGodine());
@@ -155,7 +161,9 @@ public class KorisnikService {
         return korisnikRepository.findAll(pageable);
     }
 
-
+    public Optional<Korisnik> getUserByEmail(String email) {
+        return korisnikRepository.findByEmail(email);
+    }
 
 
 }
