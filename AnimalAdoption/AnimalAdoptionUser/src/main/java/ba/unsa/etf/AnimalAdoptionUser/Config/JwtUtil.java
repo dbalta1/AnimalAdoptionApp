@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 public class JwtUtil {
@@ -14,15 +15,16 @@ public class JwtUtil {
     private final long jwtExpirationMs = 86400000; // 1 dan
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    public String generateToken(String username) {
+    public String generateToken(String email, UUID korisnikId) {
         return Jwts.builder()
-                .setSubject(username)
-                .setIssuer(jwtIssuer)
+                .setSubject(email)
+                .claim("id", korisnikId.toString()) // DODANO
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
-                .signWith(key)
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // npr. 10h
+                .signWith(SignatureAlgorithm.HS256, key)
                 .compact();
     }
+
 
     public String getUsernameFromToken(String token) {
         return parseToken(token).getBody().getSubject();

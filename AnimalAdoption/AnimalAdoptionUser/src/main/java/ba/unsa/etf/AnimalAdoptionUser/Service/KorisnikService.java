@@ -5,6 +5,7 @@ import ba.unsa.etf.AnimalAdoptionUser.Entity.Uloga;
 import ba.unsa.etf.AnimalAdoptionUser.dto.KorisnikDTO;
 import ba.unsa.etf.AnimalAdoptionUser.Entity.Korisnik;
 import ba.unsa.etf.AnimalAdoptionUser.Repository.KorisnikRepository;
+import ba.unsa.etf.AnimalAdoptionUser.dto.LoginResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -176,25 +177,28 @@ public class KorisnikService {
         return ResponseEntity.ok("Uspješna registracija.");
     }
 
-
     @Autowired
     private JwtUtil jwtUtil;
 
-    public ResponseEntity<String> login(LoginRequest request) {
-        Optional<Korisnik> korisnikOpt = korisnikRepository.findByUsername(request.getUsername());
+    public ResponseEntity<LoginResponse> login(LoginRequest request) {
+        Optional<Korisnik> korisnikOpt = korisnikRepository.findByEmail(request.getEmail());
         if (korisnikOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Pogrešan username ili lozinka.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(null);
         }
 
         Korisnik korisnik = korisnikOpt.get();
         if (!passwordEncoder.matches(request.getPassword(), korisnik.getPassword())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Pogrešan username ili lozinka.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(null);
         }
 
-        String jwt = jwtUtil.generateToken(korisnik.getUsername());
+        String jwt = jwtUtil.generateToken(korisnik.getEmail(), korisnik.getKorisnikId());
 
-        return ResponseEntity.ok(jwt);
+        LoginResponse response = new LoginResponse(jwt, korisnik.getUloga().toString());
+        return ResponseEntity.ok(response);
     }
+
 
 
 
