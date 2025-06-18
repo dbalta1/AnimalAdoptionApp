@@ -1,0 +1,156 @@
+/* DonationForm.css */
+.donation-container {
+  background-color: #f7fafc;
+  min-height: 100vh;
+  padding: 3rem 0;
+}
+
+.hero-header {
+  position: relative;
+  background: linear-gradient(to right, #FF7F50, #FF7F50);
+  height: 12rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  margin-bottom: 3rem;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: black;
+  opacity: 0.2;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 0 1rem;
+}
+
+.hero-title {
+  font-size: 1.875rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 768px) {
+  .hero-title {
+    font-size: 2.25rem;
+  }
+}
+
+.form-card {
+  background-color: white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  max-width: 28rem;
+  margin: 0 auto;
+}
+
+.form-header {
+  background-color: #FF7F50;
+  padding: 1.5rem;
+}
+
+.form-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+}
+
+.form-content {
+  padding: 1.5rem;
+}
+
+.error-message {
+  background-color: #fee2e2;
+  border-left: 4px solid #ef4444;
+  color: #b91c1c;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 0.375rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.25rem;
+}
+
+.form-input {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-input:focus {
+  border-color: #FF7F50;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+}
+
+.submit-button {
+  width: 100%;
+  background-color: #FF7F50;
+  color: white;
+  font-weight: bold;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s;
+}
+
+.submit-button:hover {
+  background-color: #FF7F50;
+}
+
+.submit-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.footer-text {
+  text-align: center;
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-top: 1.5rem;
+}
+
+.back-link {
+  color: #FF7F50;
+  font-weight: 500;
+  margin-top: 0.5rem;
+  display: inline-block;
+}
+
+.back-link:hover {
+  color: #FF7F50;
+}

@@ -1,0 +1,23 @@
+.about-page {
+  background-color: #f8f9fa;
+}
+
+.about-page h2 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.about-page p {
+  font-size: 1.1rem;
+  color: #555;
+}
+
+.orange-button {
+  background-color: #FF7F50;
+  color: white;
+  border: none;
+}
+
+.orange-button:hover {
+  background-color: #e8663e;
+}

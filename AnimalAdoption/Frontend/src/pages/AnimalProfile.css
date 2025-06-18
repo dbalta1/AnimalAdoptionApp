@@ -1,0 +1,141 @@
+/* Animal Profile Styles */
+.animal-card {
+  border: none;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.animal-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  min-height: 400px;
+}
+
+.animal-name {
+  font-size: 2.5rem;
+  color: #333;
+  font-weight: 700;
+}
+
+.animal-meta {
+  font-size: 1.1rem;
+  color: #6c757d;
+}
+
+.paw-icon {
+  color: #FF7F50;
+}
+
+.animal-info ul {
+  padding-left: 20px;
+}
+
+.animal-info li {
+  margin-bottom: 8px;
+}
+
+.animal-description {
+  color: #555;
+  line-height: 1.6;
+}
+
+/* Buttons */
+.back-button {
+  border-radius: 8px;
+  padding: 8px 16px;
+}
+
+.adopt-button {
+  background-color: #FF7F50;
+  border-color: #FF7F50;
+  color: white;
+  font-weight: 600;
+  padding: 10px 25px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.adopt-button:hover {
+  background-color: #e67347;
+  border-color: #e67347;
+  transform: translateY(-2px);
+}
+
+.favorite-button {
+  padding: 0;
+}
+
+/* Adoption Form Styles */
+.adoption-form-card {
+  border: 1px solid rgba(255, 127, 80, 0.2);
+  border-radius: 10px;
+}
+
+.form-title h3 {
+  font-weight: 700;
+}
+
+.form-control, .form-select {
+  border-radius: 8px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #FF7F50;
+  box-shadow: 0 0 0 0.25rem rgba(255, 127, 80, 0.25);
+}
+
+.form-label {
+  font-weight: 500;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+/* Form Buttons */
+.cancel-button {
+  border-radius: 8px;
+  padding: 10px 20px;
+}
+
+.submit-button {
+  background-color: #FF7F50;
+  border-color: #FF7F50;
+  color: white;
+  font-weight: 600;
+  padding: 10px 25px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.submit-button:hover {
+  background-color: #e67347;
+  border-color: #e67347;
+}
+
+.success-alert {
+  border-radius: 8px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .animal-image {
+    min-height: 300px;
+    border-radius: 10px 10px 0 0;
+  }
+  
+  .animal-name {
+    font-size: 2rem;
+  }
+  
+  .form-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .form-buttons button {
+    width: 100%;
+  }
+}
