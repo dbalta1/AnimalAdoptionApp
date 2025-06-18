@@ -36,6 +36,10 @@ public class ForumKomentarController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/all-sa-autorom")
+    public List<ForumKomentarDTO> getAllKomentariSaAutorom() {
+        return komentarService.getSviKomentariSaAutorima();
+    }
 
     // Getter koji vraća komentar i njegovo ime pretražujući po ID
     @GetMapping("/sa-korisnikom/{id}")

@@ -1,0 +1,156 @@
+version: '3.8'
+
+services:
+  mysql-user:
+    image: mysql:8.0
+    container_name: mysql-user
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password  # Koristi MYSQL_ROOT_PASSWORD umesto MYSQL_USER i MYSQL_PASSWORD
+      MYSQL_DATABASE: user
+    ports:
+      - "3307:3306"
+    networks:
+      - animal-net
+
+  mysql-notification:
+    image: mysql:8.0
+    container_name: mysql-notification
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password  # Koristi MYSQL_ROOT_PASSWORD umesto MYSQL_USER i MYSQL_PASSWORD
+      MYSQL_DATABASE: notification
+    ports:
+      - "3308:3306"
+    networks:
+      - animal-net
+
+  mysql-pet:
+    image: mysql:8.0
+    container_name: mysql-pet
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password  # Koristi MYSQL_ROOT_PASSWORD umesto MYSQL_USER i MYSQL_PASSWORD
+      MYSQL_DATABASE: pet
+    ports:
+      - "3309:3306"
+    networks:
+      - animal-net
+
+  mysql-education:
+    image: mysql:8.0
+    container_name: mysql-education
+    restart: always
+    environment:
+      MYSQL_DATABASE: education
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - "3310:3306"
+    networks:
+      - animal-net
+
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - animal-net
+
+  eureka-server:
+    build:
+      context: ./EurekaServer
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    networks:
+      - animal-net
+
+  config-server:
+    build:
+      context: ./ConfigServer
+    container_name: config-server
+    ports:
+      - "8888:8888"
+    depends_on:
+      - eureka-server
+    networks:
+      - animal-net
+
+  animaladoptionuser:
+    build:
+      context: ./AnimalAdoptionUser
+    container_name: animaladoptionuser
+    depends_on:
+      - mysql-user
+      - eureka-server
+      - config-server
+    networks:
+      - animal-net
+
+  animaladoptionnotification:
+    build:
+      context: ./AnimalAdoptionNotification
+    container_name: animaladoptionnotification
+    depends_on:
+      - mysql-notification
+      - rabbitmq
+      - eureka-server
+      - config-server
+    networks:
+      - animal-net
+
+  animaladoptionpet:
+    build:
+      context: ./AnimalAdoptionPet
+    container_name: animaladoptionpet
+    depends_on:
+      - mysql-pet
+      - eureka-server
+      - config-server
+    networks:
+      - animal-net
+
+  animaladoptioneducation:
+    build:
+      context: ./AnimalAdoptionEducation
+    container_name: animaladoptioneducation
+    depends_on:
+        - mysql-education
+        - eureka-server
+        - config-server
+    networks:
+        - animal-net
+
+  api-gateway:
+    build:
+      context: ./apiGateway
+    container_name: api-gateway
+    ports:
+      - "8090:8090"
+    depends_on:
+      - eureka-server
+      - animaladoptionuser
+      - animaladoptioneducation
+    networks:
+      - animal-net
+
+  frontend:
+    build:
+      context: ./Frontend
+    container_name: frontend-app
+    ports:
+      - "8081:80"
+    depends_on:
+      - api-gateway
+    networks:
+      - animal-net
+
+networks:
+  animal-net:
+    driver: bridge

@@ -76,7 +76,7 @@ public class KorisnikService {
         korisnik.setUloga(korisnikCreateDTO.getUloga());
 
         korisnik.setKorisnikId(UUID.randomUUID());
-
+        System.out.println("📤 Slanje poruke na RabbitMQ: " + korisnik.getEmail());
         Korisnik savedUser = korisnikRepository.save(korisnik);
         UserCreatedEvent event = new UserCreatedEvent(
                 (long) korisnik.getId(),  // jer je kod tebe ID `int`, a očekuje se `Long`
