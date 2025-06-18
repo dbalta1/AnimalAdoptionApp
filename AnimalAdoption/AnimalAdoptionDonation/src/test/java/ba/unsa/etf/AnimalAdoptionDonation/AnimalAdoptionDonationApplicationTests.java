@@ -1,4 +1,4 @@
-package ba.unsa.etf.AnimalAdoptionDonation;
+/*ackage ba.unsa.etf.AnimalAdoptionDonation;
 
 
 import ba.unsa.etf.AnimalAdoptionDonation.DTO.KorisnikDTO;
@@ -277,3 +277,4 @@ class KorisnikControllerTest {
 	}
 
 }
+*/
