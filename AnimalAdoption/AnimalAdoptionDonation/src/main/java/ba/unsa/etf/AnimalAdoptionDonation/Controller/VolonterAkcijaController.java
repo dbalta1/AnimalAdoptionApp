@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -26,9 +28,22 @@ public class VolonterAkcijaController {
         return volonterAkcija.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+    /*@PostMapping
     public VolonterAkcijaDTOBO createVolonterAkcija(@RequestBody VolonterAkcijaDTOBO volonterAkcijaDTO) {
         return volonterAkcijaService.saveVolonterAkcija(volonterAkcijaDTO);
+    }*/
+
+    @PostMapping
+    public ResponseEntity<?> prijaviVolontera(@RequestBody VolonterAkcijaDTOBO dto) {
+        System.out.println("Primljen zahtjev za prijavu: " + dto); // LOG
+        try {
+            VolonterAkcijaDTOBO result = volonterAkcijaService.saveVolonterAkcija(dto);
+            return ResponseEntity.ok(Map.of("message", "Uspješno ste se prijavili za volontiranje"));
+        } catch (Exception e) {
+            System.err.println("Greška pri prijavi: " + e.getMessage()); // LOG
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", e.getMessage()));
+        }
     }
 
     @DeleteMapping("/{id}")

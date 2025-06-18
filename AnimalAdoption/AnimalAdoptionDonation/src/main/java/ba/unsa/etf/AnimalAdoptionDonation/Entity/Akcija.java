@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -31,6 +32,22 @@ public class Akcija {
     @Column(nullable = false)
     private String opisDogadjaja;
 
-    @OneToMany(mappedBy = "volonterskaAkcija")
-    private List<VolonterAkcija> volonteri;
+    @OneToMany(
+            mappedBy = "volonterskaAkcija",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<VolonterAkcija> volonteri = new ArrayList<>(); // Inicijalizacija liste
+
+    private String lokacijaAkcije;
+
+    public void addVolonter(VolonterAkcija volonterAkcija) {
+        volonteri.add(volonterAkcija);
+        volonterAkcija.setVolonterskaAkcija(this);
+    }
+
+    public void removeVolonter(VolonterAkcija volonterAkcija) {
+        volonteri.remove(volonterAkcija);
+        volonterAkcija.setVolonterskaAkcija(null);
+    }
 }

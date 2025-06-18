@@ -14,7 +14,7 @@ public class VolonterAkcijaDTOBO {
     private int id;
     private int volonterId;
     private int akcijaId;
-    @FutureOrPresent(message = "Datum mora biti danas ili u buducnosti.")
+    //@FutureOrPresent(message = "Datum mora biti danas ili u buducnosti.")
     private LocalDate datumAkcije;
 
 }
