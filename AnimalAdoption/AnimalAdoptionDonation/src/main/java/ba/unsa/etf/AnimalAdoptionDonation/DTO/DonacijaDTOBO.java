@@ -27,4 +27,8 @@ public class DonacijaDTOBO {
 
     @FutureOrPresent(message = "Datum mora biti danas ili u buducnosti.")
     private LocalDate datumDonacije;
+
+    /*private String paymentStatus; // "pending", "completed", "failed"
+    private String stripePaymentId;*/
+    private String paymentUrl;
 }

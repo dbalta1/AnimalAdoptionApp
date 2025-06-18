@@ -19,4 +19,6 @@ public class AkcijaDTOBO {
     private String opisDogadjaja;
     private List<Integer> volonteriIds;
 
+    private String lokacijaAkcije;
+
 }

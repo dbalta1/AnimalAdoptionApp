@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -23,8 +24,8 @@ public class Volonter {
     @JoinColumn(name = "korisnikId", referencedColumnName = "Id", nullable = false)
     private Korisnik korisnik;
 
-    @OneToMany(mappedBy = "volonter")
-    private Set<VolonterAkcija> volonterskeAkcije;
+    @OneToMany(mappedBy = "volonter", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<VolonterAkcija> volonterskeAkcije = new HashSet<>();
 
     @NotNull(message = "Ovaj podatak je obavezan.")
     @Column(nullable = false)

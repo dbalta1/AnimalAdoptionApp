@@ -28,6 +28,6 @@ public class VolonterAkcija {
 
     @NotNull(message = "Ovaj podatak je obavezan.")
     @Column(nullable = false)
-    @FutureOrPresent(message = "Datum mora biti danas ili u buducnosti.")
+    //@FutureOrPresent(message = "Datum mora biti danas ili u buducnosti.")
     private LocalDate datumAkcije;
 }

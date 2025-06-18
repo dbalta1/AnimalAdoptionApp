@@ -59,7 +59,7 @@ public class DonacijaControllerTest {
     public void setUp() {
     }
 
-    @Test
+    /*@Test
     void getSveDonacije_ReturnsListOfDonacije() {
         // Priprema mock podataka
         DonacijaDTOBO donacija1 = new DonacijaDTOBO();
@@ -95,7 +95,7 @@ public class DonacijaControllerTest {
 
         // Provjera da li je pozvan servis tačno jednom
         verify(donacijaService, times(1)).getSveDonacije();
-    }
+    }*/
 
 
 

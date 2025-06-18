@@ -40,4 +40,8 @@ public class Donacija {
     @Column(nullable = false)
     @FutureOrPresent(message = "Datum mora biti danas ili u buducnosti.")
     private LocalDate datumDonacije;
+
+    private String paymentUrl;
+    /*private String paymentStatus;
+    private String stripePaymentId;*/
 }

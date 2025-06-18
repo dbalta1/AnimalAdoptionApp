@@ -124,6 +124,9 @@ public class DonacijaService {
         dto.setIznos(donacija.getIznos());
         dto.setOpisDonacije(donacija.getOpisDonacije());
         dto.setDatumDonacije(donacija.getDatumDonacije());
+
+        dto.setPaymentUrl(donacija.getPaymentUrl());
+
         if (donacija.getKorisnik() != null)
             dto.setKorisnikId(donacija.getKorisnik().getId());
         return dto;
@@ -162,4 +165,15 @@ public class DonacijaService {
         Donacija savedDonacija = donacijaRepository.save(donacija);
         return mapToDTO(savedDonacija);
     }
+
+
+    /*public void updatePaymentStatus(int donationId, String status) {
+        donacijaRepository.findById(donationId).ifPresent(donacija -> {
+            donacija.setPaymentStatus(status);
+            donacijaRepository.save(donacija);
+            systemEventsGrpcClient.logEvent("donations", "unknown",
+                    "PAYMENT_" + status.toUpperCase(),
+                    "donationId:" + donationId, "SUCCESS");
+        });
+    }*/
 }

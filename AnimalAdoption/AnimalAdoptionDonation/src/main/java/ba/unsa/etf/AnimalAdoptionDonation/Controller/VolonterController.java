@@ -12,6 +12,7 @@ import ba.unsa.etf.AnimalAdoptionDonation.Repository.VolonterRepository;
 import ba.unsa.etf.AnimalAdoptionDonation.Service.KorisnikService;
 import ba.unsa.etf.AnimalAdoptionDonation.Service.VolonterService;
 import jakarta.validation.Valid;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -91,5 +92,27 @@ public class VolonterController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Volonter sa ID " + id + " nije pronadjen."));
         }
     }
+
+
+    /* odavde promjena */
+    @Autowired
+    private ModelMapper modelMapper;
+
+    private VolonterDTOBO mapToDTO(Volonter volonter) {
+        return modelMapper.map(volonter, VolonterDTOBO.class);
+    }
+    @GetMapping("/korisnik/{korisnikId}")
+    public ResponseEntity<?> getVolonterByKorisnikId(@PathVariable int korisnikId) {
+        Optional<Volonter> volonter = volonterRepository.findByKorisnikId(korisnikId);
+        return volonter.map(v -> ResponseEntity.ok(mapToDTO(v)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+
+
+
+
+
+
 
 }
