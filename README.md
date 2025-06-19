@@ -38,6 +38,119 @@ This project is built using a **microservices architecture**, and includes the f
 
 ---
 
+# 🐾 Animal Adoption System – Docker Deployment
+
+This is a microservices-based application for managing the animal adoption process, developed using Spring Boot and React. The system uses Docker containers for simple and isolated deployment of all components.
+
+---
+
+## 📦 System Overview
+
+- **Frontend**: React application
+- **Backend Microservices**:
+  - `AnimalAdoptionUser` – user registration
+  - `AnimalAdoptionPet` – pet management
+  - `AnimalAdoptionNotification` – e-mail notifications (RabbitMQ)
+  - `AnimalAdoptionDonation` – donations management
+  - `AnimalAdoptionEducation` – educational articles
+- **Infrastructure**:
+  - `Config Server` – centralized configuration
+  - `Eureka Server` – service registry
+  - `API Gateway` – single entry point
+  - `RabbitMQ` – asynchronous communication
+  - `MySQL` databases – one for each microservice
+
+---
+
+## ⚙️ Prerequisites
+
+- [Docker](https://www.docker.com/) installed
+- [Docker Compose](https://docs.docker.com/compose/) installed
+- Make sure the following ports are available: 3000, 8080, 8761, 8888, 15672, 5672...
+
+---
+
+## 🔧 Building All Microservices
+
+First, build the `.jar` files for all Spring Boot services:
+
+```bash
+cd AnimalAdoptionUser
+mvn clean package -DskipTests
+
+cd ../AnimalAdoptionPet
+mvn clean package -DskipTests
+
+cd ../AnimalAdoptionNotification
+mvn clean package -DskipTests
+
+cd ../AnimalAdoptionDonation
+mvn clean package -DskipTests
+
+cd ../AnimalAdoptionEducation
+mvn clean package -DskipTests
+
+cd ../ConfigServer
+mvn clean package -DskipTests
+
+cd ../EurekaServer
+mvn clean package -DskipTests
+
+cd ../apiGateway
+mvn clean package -DskipTests
+
+🐳 Docker Build
+
+Build all services:
+
+docker compose build
+
+Or, to build and run all services at once:
+
+docker compose up -d --build
+
+▶️ Running the Application
+
+Start all services:
+
+docker compose up -d
+
+❌ Stopping the Application
+
+docker compose down
+
+🌐 Access URLs
+Service	URL
+Frontend (React)	http://localhost:3000
+API Gateway	http://localhost:8080
+Eureka Dashboard	http://localhost:8761
+Config Server	http://localhost:8888
+RabbitMQ UI	http://localhost:15672 (guest/guest)
+
+🧠 Notes
+
+    In application.properties files, use Docker service names as hosts (e.g. mysql-user, eureka-server, config-server, rabbitmq) instead of localhost.
+
+    Use mem_limit and JAVA_TOOL_OPTIONS in Dockerfiles to optimize memory usage.
+
+    The Notification microservice listens for asynchronous events via RabbitMQ (user.created queue).
+
+    Make sure all .jar files are generated in the target/ directories before starting the application.
+
+
+📁 Project Structure (Simplified)
+
+/
+├── docker-compose.yml
+├── frontend/
+│   ├── Dockerfile
+│   └── nginx.conf
+├── AnimalAdoptionUser/
+│   └── Dockerfile
+├── AnimalAdoptionNotification/
+│   └── Dockerfile
+├── ...
+
 
 > This application was developed as part of a student project aiming to promote animal welfare through a user-friendly and modular platform.
 
