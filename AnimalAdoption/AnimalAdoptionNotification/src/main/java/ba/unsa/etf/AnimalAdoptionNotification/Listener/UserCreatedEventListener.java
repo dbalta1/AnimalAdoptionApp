@@ -27,18 +27,26 @@ public class UserCreatedEventListener {
     @RabbitListener(queues = "user.created")
     public void handleUserCreated(UserCreatedEvent event) {
 
+        System.out.println("📨 Obrada zahtjeva za korisnika " + event.getEmail() + " je započela...");
+
         try {
-            //OVAKO TESTIRATI
+            // Simulacija obrade (čekanje 5 sekundi)
+            Thread.sleep(5000);
+
+            // Test greške
             if (event.getEmail().equalsIgnoreCase("test@email.com")) {
                 throw new RuntimeException("Simulirana greška u Notification servisu");
             }
+
             NotificationsSettings settings = new NotificationsSettings(
                     event.getUserId(),
                     event.getEmail(),
                     true
             );
+
             notificationRepo.save(settings);
-            System.out.println("✅ Kreirane notifikacije za korisnika " + event.getEmail());
+
+            System.out.println("✅ Obrada završena – kreirane notifikacije za korisnika " + event.getEmail());
 
         } catch (Exception e) {
             System.out.println("❌ Greška pri kreiranju notifikacija: " + e.getMessage());

@@ -1,6 +1,6 @@
 package ba.unsa.etf.AnimalAdoptionUser.Service;
 
-import ba.unsa.etf.AnimalAdoptionUser.config.RabbitMQConfig;
+import ba.unsa.etf.AnimalAdoptionUser.Config.RabbitMQConfig;
 import ba.unsa.etf.AnimalAdoptionUser.Config.JwtUtil;
 import ba.unsa.etf.AnimalAdoptionUser.Entity.Uloga;
 import ba.unsa.etf.AnimalAdoptionUser.dto.KorisnikDTO;
@@ -8,12 +8,10 @@ import ba.unsa.etf.AnimalAdoptionUser.Entity.Korisnik;
 import ba.unsa.etf.AnimalAdoptionUser.Repository.KorisnikRepository;
 import ba.unsa.etf.AnimalAdoptionUser.dto.UserCreatedEvent;
 import ba.unsa.etf.AnimalAdoptionUser.dto.LoginResponse;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import com.github.fge.jsonpatch.JsonPatchException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,7 +29,6 @@ import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 

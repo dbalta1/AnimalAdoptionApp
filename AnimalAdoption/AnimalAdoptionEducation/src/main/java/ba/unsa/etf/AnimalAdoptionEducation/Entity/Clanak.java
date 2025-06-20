@@ -25,7 +25,6 @@ public class Clanak {
     private Date datumKreiranja;
 
 
-
     public Long getId() {
         return id;
     }

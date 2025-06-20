@@ -1,4 +1,4 @@
-package ba.unsa.etf.AnimalAdoptionUser.config;
+package ba.unsa.etf.AnimalAdoptionUser.Config;
 
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
