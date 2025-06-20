@@ -30,6 +30,12 @@ This project is built using a **microservices architecture**, and includes the f
 - **Database:** MySQL
 - **Messaging:** RabbitMQ
 
+
+## 🎥 Demo Video
+
+You can watch the demo video of the application [here](https://drive.google.com/file/d/1o21Q4if__8CNKjCOPgBKK7Qm-_4fwzho/view?usp=sharing).
+
+
 ## 👥 Contributors
 
 - [Balta Džana](https://github.com/dbalta1)
